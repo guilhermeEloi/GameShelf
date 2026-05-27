@@ -1,23 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import AvatarMenu from "../AvatarMenu";
 import Button from "../Button";
-import { Nav, Logo, LogoIcon, NavRight, Avatar } from "./styles";
-
-function getInitials(name: string) {
-  return name
-    .split(" ")
-    .map((n) => n[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
-}
+import { Nav, Logo, LogoIcon, NavRight } from "./styles";
 
 type NavbarProps = {
   onAddGame?: () => void;
 };
 
 function Navbar({ onAddGame }: NavbarProps) {
-  const { user, logout } = useAuth();
   const navigate = useNavigate();
 
   return (
@@ -43,9 +33,7 @@ function Navbar({ onAddGame }: NavbarProps) {
           Adicionar
         </Button>
 
-        <Avatar onClick={logout} title="Sair">
-          {user ? getInitials(user.name) : "U"}
-        </Avatar>
+        <AvatarMenu />
       </NavRight>
     </Nav>
   );

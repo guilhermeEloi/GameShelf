@@ -109,7 +109,9 @@ function Login() {
           />
 
           <ForgotPassword>
-            <a>Esqueci minha senha</a>
+            <a onClick={() => navigate("/forgot-password")}>
+              Esqueci minha senha
+            </a>
           </ForgotPassword>
 
           <Button onClick={handleLogin}>Entrar</Button>
