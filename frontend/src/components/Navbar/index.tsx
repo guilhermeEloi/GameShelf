@@ -12,7 +12,11 @@ function getInitials(name: string) {
     .toUpperCase();
 }
 
-function Navbar() {
+type NavbarProps = {
+  onAddGame?: () => void;
+};
+
+function Navbar({ onAddGame }: NavbarProps) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
@@ -29,7 +33,7 @@ function Navbar() {
         <Button
           variant="contained"
           sx={{ width: "auto", px: 2, py: 0.8 }}
-          onClick={() => {}}
+          onClick={onAddGame}
         >
           <i
             className="ti ti-plus"

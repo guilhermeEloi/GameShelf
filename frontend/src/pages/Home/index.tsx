@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 import Navbar from "../../components/Navbar";
 import StatCard from "../../components/StatCard";
@@ -19,6 +20,7 @@ import {
   SectionTitle,
   GamesGrid,
 } from "./styles";
+import AddGameModal from "../../components/AddGameModal";
 
 type TabFilter = "all" | GameStatus;
 
@@ -33,6 +35,9 @@ const tabs: { key: TabFilter; label: string }[] = [
 function Home() {
   const { user } = useAuth();
   const [activeTab, setActiveTab] = useState<TabFilter>("all");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const navigate = useNavigate();
 
   const featuredGame = mockGames.find((g) => g.status === "playing");
 
@@ -48,7 +53,14 @@ function Home() {
 
   return (
     <Container>
-      <Navbar />
+      <Navbar onAddGame={() => setIsModalOpen(true)} />
+
+      {isModalOpen && (
+        <AddGameModal
+          onClose={() => setIsModalOpen(false)}
+          onAdd={(data) => console.log("Jogo adicionado:", data)}
+        />
+      )}
       <Content>
         <Hero>
           <h1>Minha Estante 🎮</h1>
@@ -134,9 +146,13 @@ function Home() {
 
         <GamesGrid>
           {filteredGames.map((game) => (
-            <GameCard key={game.id} game={game} />
+            <GameCard
+              key={game.id}
+              game={game}
+              onClick={() => navigate(`/game/${game.id}`)}
+            />
           ))}
-          <AddGameCard />
+          <AddGameCard onClick={() => setIsModalOpen(true)} />
         </GamesGrid>
       </Content>
     </Container>
