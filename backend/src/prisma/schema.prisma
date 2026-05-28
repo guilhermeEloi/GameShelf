@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  shelf ShelfGame[]
+
+  @@map("users")
+}
+
+model Game {
+  id          String   @id @default(uuid())
+  rawgId      String   @unique
+  title       String
+  cover       String?
+  developer   String?
+  releaseYear String?
+  genre       String?
+  createdAt   DateTime @default(now())
+
+  shelf ShelfGame[]
+
+  @@map("games")
+}
+
+model ShelfGame {
+  id        String      @id @default(uuid())
+  status    ShelfStatus
+  platform  String
+  rating    Float?
+  review    String?     @db.Text
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  gameId String
+  game   Game   @relation(fields: [gameId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, gameId])
+  @@map("shelf_games")
+}
+
+enum ShelfStatus {
+  playing
+  completed
+  wishlist
+  dropped
+}
