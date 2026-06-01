@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:8
+    container_name: gameshelf-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: gameshelf
+    ports:
+      - '3306:3306'
+    volumes:
+      - gameshelf_db:/var/lib/mysql
+    networks:
+      - gameshelf-network
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gameshelf-backend
+    restart: always
+    env_file:
+      - ./backend/.env
+    ports:
+      - '3333:3333'
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    networks:
+      - gameshelf-network
+    depends_on:
+      db:
+        condition: service_healthy
+    command: >
+      sh -c "npx prisma migrate deploy && yarn dev"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: gameshelf-frontend
+    restart: always
+    env_file:
+      - ./frontend/.env
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    networks:
+      - gameshelf-network
+    depends_on:
+      - backend
+
+volumes:
+  gameshelf_db:
+
+networks:
+  gameshelf-network:
+    driver: bridge
