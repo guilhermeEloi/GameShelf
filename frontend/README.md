@@ -1,73 +1,105 @@
-# React + TypeScript + Vite
+# GameShelf — Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite + TypeScript frontend for the GameShelf app.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **React 18** — UI library
+- **Vite** — build tool and dev server
+- **TypeScript** — static typing
+- **Styled Components** — CSS-in-JS styling
+- **Material UI (MUI)** — component library
+- **React Router DOM** — client-side routing
+- **Axios** — HTTP client
 
-## React Compiler
+## Project Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── assets/           # images, icons, fonts
+├── components/       # reusable components
+│   ├── AddGameModal/
+│   ├── AvatarMenu/
+│   ├── Button/
+│   ├── FeaturedGame/
+│   ├── GameCard/
+│   ├── Input/
+│   ├── Navbar/
+│   ├── StatCard/
+│   └── StatusBadge/
+├── contexts/         # React contexts
+│   └── AuthContext.tsx
+├── hooks/            # custom hooks
+│   └── useAuth.ts
+├── mocks/            # mock data for development
+│   └── games.ts
+├── pages/            # app screens
+│   ├── ForgotPassword/
+│   ├── GameDetail/
+│   ├── Home/
+│   ├── Login/
+│   ├── Profile/
+│   └── Register/
+├── routes/           # route definitions
+│   └── index.tsx
+├── services/         # API calls
+│   └── api.ts
+├── styles/           # global styles and theme
+│   ├── global.ts
+│   ├── theme.ts
+│   └── styled.d.ts
+├── types/            # TypeScript interfaces
+│   └── game.ts
+├── App.tsx
+└── main.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Pages
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+| Page            | Route            | Auth required |
+| --------------- | ---------------- | ------------- |
+| Login           | /login           | No            |
+| Register        | /register        | No            |
+| Forgot Password | /forgot-password | No            |
+| Home            | /                | Yes           |
+| Game Detail     | /game/:id        | Yes           |
+| Profile         | /profile         | Yes           |
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Components
+
+| Component    | Description                                         |
+| ------------ | --------------------------------------------------- |
+| Navbar       | Top navigation with add button and avatar menu      |
+| AvatarMenu   | Dropdown with profile and logout options            |
+| GameCard     | Game card with cover, status, platform and rating   |
+| FeaturedGame | Wide card for the currently playing game            |
+| StatCard     | Statistics card for the dashboard                   |
+| StatusBadge  | Colored badge for game status                       |
+| Input        | MUI TextField wrapper with custom styling           |
+| Button       | MUI Button wrapper with contained/outlined variants |
+| AddGameModal | Modal for searching and adding games to shelf       |
+
+## Environment Variables
+
+Create a `.env` file in the `frontend/` folder:
+
+```env
+VITE_API_URL=http://localhost:3333/api
 ```
+
+## Running locally with Docker
+
+```bash
+# from the root of the project
+docker compose up frontend
+```
+
+## Running locally without Docker
+
+```bash
+cd frontend
+yarn install
+yarn dev
+```
+
+Access at `http://localhost:5173`
