@@ -39,7 +39,7 @@ services:
       db:
         condition: service_healthy
     command: >
-      sh -c "npx prisma migrate deploy && yarn dev"
+      sh -c "npx prisma generate && npx prisma db push && yarn dev"
 
   frontend:
     build:
